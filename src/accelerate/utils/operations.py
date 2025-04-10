@@ -65,7 +65,7 @@ def is_namedtuple(data):
     """
     data_type = type(data)
     bases = data_type.__bases__
-    if len(bases) != 1 or bases[0] != tuple:
+    if len(bases) != 1 or bases[0] is not tuple:
         return False
     fields = getattr(data_type, "_fields", None)
     if not isinstance(fields, tuple):
