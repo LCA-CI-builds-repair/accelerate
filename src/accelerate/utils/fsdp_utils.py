@@ -17,7 +17,7 @@ import torch
 
 from ..logging import get_logger
 from .constants import FSDP_MODEL_NAME, FSDP_PYTORCH_VERSION, OPTIMIZER_NAME
-from .imports import is_torch_distributed_available, is_peft_available
+from .imports import is_peft_available, is_torch_distributed_available
 from .other import extract_model_from_parallel
 from .versions import is_torch_version
 
@@ -114,7 +114,7 @@ def load_fsdp_model(fsdp_plugin, accelerator, model, input_dir, model_index=0, a
         model, fsdp_plugin.state_dict_type, fsdp_plugin.state_dict_config, fsdp_plugin.optim_state_dict_config
     ):
         if fsdp_plugin.state_dict_type == StateDictType.FULL_STATE_DICT:
-            if type(model) != FSDP and accelerator.process_index != 0:
+            if not isinstance(model, FSDP) and accelerator.process_index != 0:
                 if not fsdp_plugin.sync_module_states:
                     raise ValueError(
                         "Set the `sync_module_states` flag to `True` so that model states are synced across processes when "
