@@ -36,9 +36,9 @@ from accelerate.test_utils.testing import (
     AccelerateTestCase,
     TempDirTestCase,
     execute_subprocess_async,
-    require_non_cpu,
     require_deepspeed,
     require_multi_device,
+    require_non_cpu,
     slow,
 )
 from accelerate.test_utils.training import RegressionDataset
@@ -408,10 +408,10 @@ class DeepSpeedConfigIntegration(AccelerateTestCase):
                 model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
                     model, dummy_optimizer, train_dataloader, eval_dataloader, dummy_lr_scheduler
                 )
-                self.assertTrue(type(model) == DeepSpeedEngine)
-                self.assertTrue(type(optimizer) == DeepSpeedOptimizerWrapper)
-                self.assertTrue(type(lr_scheduler) == DeepSpeedSchedulerWrapper)
-                self.assertTrue(type(accelerator.deepspeed_engine_wrapped) == DeepSpeedEngineWrapper)
+                self.assertTrue(isinstance(model, DeepSpeedEngine))
+                self.assertTrue(isinstance(optimizer, DeepSpeedOptimizerWrapper))
+                self.assertTrue(isinstance(lr_scheduler, DeepSpeedSchedulerWrapper))
+                self.assertTrue(isinstance(accelerator.deepspeed_engine_wrapped, DeepSpeedEngineWrapper))
 
         elif optim_type == CUSTOM_OPTIMIZER and scheduler_type == DS_SCHEDULER:
             # Test custom optimizer + DeepSpeed scheduler
@@ -442,10 +442,10 @@ class DeepSpeedConfigIntegration(AccelerateTestCase):
                 model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
                     model, optimizer, train_dataloader, eval_dataloader, dummy_lr_scheduler
                 )
-                self.assertTrue(type(model) == DeepSpeedEngine)
-                self.assertTrue(type(optimizer) == DeepSpeedOptimizerWrapper)
-                self.assertTrue(type(lr_scheduler) == DeepSpeedSchedulerWrapper)
-                self.assertTrue(type(accelerator.deepspeed_engine_wrapped) == DeepSpeedEngineWrapper)
+                self.assertTrue(isinstance(model, DeepSpeedEngine))
+                self.assertTrue(isinstance(optimizer, DeepSpeedOptimizerWrapper))
+                self.assertTrue(isinstance(lr_scheduler, DeepSpeedSchedulerWrapper))
+                self.assertTrue(isinstance(accelerator.deepspeed_engine_wrapped, DeepSpeedEngineWrapper))
         elif optim_type == DS_OPTIMIZER and scheduler_type == CUSTOM_SCHEDULER:
             # Test deepspeed optimizer + custom scheduler
             deepspeed_plugin = DeepSpeedPlugin(hf_ds_config=self.ds_config_file[ZERO2])
